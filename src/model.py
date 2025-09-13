@@ -19,13 +19,19 @@ class MyModel(nn.Module):
             nn.ReLU(),
             nn.BatchNorm2d(64),
             nn.MaxPool2d(kernel_size=(2,2)),
+
+            nn.Conv2d(in_channels=64, out_channels=128, kernel_size=(3,3), stride=1, padding='same'),
+            nn.ReLU(),
+            nn.BatchNorm2d(128),
+            nn.MaxPool2d(kernel_size=(2,2)),
         )
 
         # classifier
         self.classifier = nn.Sequential(
         # ANN
             nn.Flatten(),
-            nn.Linear(64*7*7,128), #HL1
+            nn.Linear(128 * 3 * 3, 128),
+
             nn.ReLU(),
             nn.Dropout(0.4),
 
@@ -53,7 +59,7 @@ model.to(device)
 
 loss_func = nn.CrossEntropyLoss()
 
-optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=1e-4)
+optimizer = optim.SGD(model.parameters(), lr=learning_rate, weight_decay=1e-4)
 
 
 # Training loop
