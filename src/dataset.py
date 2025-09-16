@@ -5,6 +5,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from torchvision.transforms import transforms as T
 from PIL import Image
+import yaml
 
 
 # Step 1- Load data
@@ -76,9 +77,15 @@ class dataset(Dataset):
 train_dataset = dataset(X_train, y_train)
 test_dataset = dataset(X_test, y_test)
 
+# Extract batch size from config file
+with open("config.yaml") as f:
+    config = yaml.safe_load(f)
+
+batch_size = config["training"]["batch_size"]
+
 # create dataloader objects
-train_dataloader = DataLoader(train_dataset, batch_size=32, shuffle=True)
-test_dataloader = DataLoader(test_dataset, batch_size=32, shuffle=False)
+train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
 # print(len(train_dataloader))
 
